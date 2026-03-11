@@ -185,3 +185,52 @@ class RBTree:
         if node.right == None:
             return "[" +  self.__str_helper(node.left) + " <- " + str(node) + "]"
         return "[" + self.__str_helper(node.left) + " <- " + str(node) + " -> " + self.__str_helper(node.right) + "]"
+#XC3 TRee
+class XC3Node:
+    def __init__(self, degree):
+        self.degree = degree
+        self.children = []
+
+    def fillChildren(self):
+        for i in range(1, self.degree + 1):
+            if i <= 2:
+                cDegree = 0
+            else:
+                cDegree = i - 2
+
+            child = XC3Node(cDegree)
+            child.fillChildren()
+            self.children.append(child)
+
+
+class XC3Tree:
+    def __init__(self, degree):
+        self.root = None
+        self.rootDegree = degree
+        self.buildTree()
+    
+    def buildTree(self):
+        self.root = XC3Node(self.rootDegree)
+        self.root.fillChildren()
+    
+    def getHeight(self):
+        if self.root is None:
+            return 0
+        return self.__getHeight(self.root)
+
+    def __getHeight(self, node):
+        if len(node.children) == 0:
+            return 1
+        return 1 + max(self.__getHeight(child) for child in node.children)
+        
+    def getNodeNum(self):
+        if self.root is None:
+            return 0
+        return self.__getNodeNum(self.root)
+
+    def __getNodeNum(self, node):
+        total = 1
+        for child in node.children:
+            total += self.__getNodeNum(child)
+        return total
+    
